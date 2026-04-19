@@ -1,6 +1,6 @@
 # Forecasting Framework with Model Selection and Prediction Intervals (R Implementation)
 
-This repository contains R code for a forecasting project that evaluates individual models, performs model selection (top-N and window size tuning), builds ensembles, and produces point forecasts as well as prediction intervals. The framework supports simulation, baseline comparisons, and result visualisation.
+This repository contains R code for a COVID-19 report case and Rt forecasting project that evaluates individual models, performs model selection (top-N and window size tuning), builds ensembles, and produces point forecasts as well as prediction intervals. The framework supports simulation, baseline comparisons, and result visualisation.
 
 ---
 
