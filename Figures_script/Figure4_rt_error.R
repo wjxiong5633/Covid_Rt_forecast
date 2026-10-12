@@ -183,8 +183,35 @@ rt.rank.proj$variable = factor(rt.rank.proj$variable,levels=index_list,ordered=T
 
 
 
-need_legend = 
-  rt.relative %>% 
+panel_c_models <- modelname_clean[
+  modelname_clean %in% (rt.relative %>% ungroup() %>% filter(rank == 1) %>% pull(modelname) %>% unique())
+]
+
+need_legend_all =
+  rt.relative %>%
+  ungroup() %>%
+  mutate(variable = factor(variable,levels = c("rmse","mape","wis","mae","smape"),
+                           labels = c("RMSE","MAPE","WIS","MAE","SMAPE"))) %>%
+  ggplot() +
+  geom_line(aes(x = proj, y = value, color = modelname,
+                linetype=modelname, size = modelname)) +
+  geom_point(aes(x = proj, y = value, color = modelname),size = 2) +
+  facet_wrap(~variable,scales = "free")+
+  scale_color_manual("Model",values=val_col, breaks=modelname_clean) +
+  scale_size_manual("Model",values=setNames(val_linewidth, modelname_clean), breaks=modelname_clean) +
+  scale_linetype_manual("Model",values=setNames(val_linetype, modelname_clean), breaks=modelname_clean)+
+  theme_bw()+
+  theme(legend.title =element_text(size=11, face = 'bold'),
+        legend.text=element_text(size=9, face = 'bold'),
+        legend.key.size = unit(5, "mm"),
+        legend.position = "bottom")+
+  guides(color=guide_legend(title = "Model",nrow = 2),
+         size="none", linetype="none")
+
+need_legend_c =
+  rt.relative %>%
+  ungroup() %>%
+  filter(modelname %in% panel_c_models) %>%
   mutate(variable = factor(variable,levels = c("rmse","mape","wis","mae","smape"),
                            labels = c("RMSE","MAPE","WIS","MAE","SMAPE"))) %>% 
   ##filter(variable != "smape") %>% 
@@ -193,18 +220,20 @@ need_legend =
                 linetype=modelname, size = modelname)) +
   geom_point(aes(x = proj, y = value, color = modelname),size = 2) +
   facet_wrap(~variable,scales = "free")+
-  scale_color_manual("Model",values=val_col) +
-  scale_size_manual("Model",labels=lab_mod,values=val_linewidth) +
-  scale_linetype_manual("Model",labels=lab_mod,values=val_linetype)+
+  scale_color_manual("Model",values=val_col, breaks=panel_c_models) +
+  scale_size_manual("Model",values=setNames(val_linewidth, modelname_clean), breaks=panel_c_models) +
+  scale_linetype_manual("Model",values=setNames(val_linetype, modelname_clean), breaks=panel_c_models)+
   theme_bw()+
   theme( legend.title =element_text(size=11, face = 'bold'),
          legend.text=element_text(size=9, face = 'bold'),
          legend.key.size = unit(5, "mm"),
          legend.position = "bottom")+
-  guides(color=guide_legend(title = "Model",nrow = 1)) 
+  guides(color=guide_legend(title = "Model",nrow = 1),
+         size="none", linetype="none")
 
 
-leg = get_legend(need_legend)
+leg_all = get_legend(need_legend_all)
+leg_c = get_legend(need_legend_c)
 
 metrics_value = 
   rt.relative %>% 
@@ -243,13 +272,14 @@ proj.relative <-
   rt.relative %>%
   mutate(variable = factor(variable,levels = c("rmse","mape","wis","mae","smape"),
                            labels = c("RMSE","MAPE","WIS","MAE","SMAPE"))) %>% 
-  filter(rank == 1) %>% 
+  filter(rank == 1) %>%
   ggplot() +
   geom_point(aes(x = proj, y = relative_index, color = modelname, group=variable), size = 2) +
   facet_wrap( ~ variable, nrow = 2, scale = "free")+
   scale_color_manual("Model",values=val_col) +
-  scale_y_continuous(limits = c(0.3,1))+
-  scale_x_continuous(breaks = c(0:7))+
+  scale_y_continuous(limits = c(0.28,1.08), expand = expansion(mult = c(0.02, 0.02)))+
+  scale_x_continuous(breaks = c(0:7), limits = c(-0.35,7.35),
+                     expand = expansion(mult = c(0, 0)))+
   labs(
     y = "Relative value",
     x = "Prediction horizon",
@@ -275,9 +305,11 @@ proj.relative
 
 library(ggpubr)
 
-p_all = ggarrange(val.rank, metrics_value,proj.relative,as_ggplot(leg), nrow = 4,labels = c("A","B","C",""), 
-                  heights = c(1,1,1,0.2))+
+p_all = ggarrange(val.rank, metrics_value, as_ggplot(leg_all),
+                  proj.relative, as_ggplot(leg_c),
+                  nrow = 5, labels = c("A","B","","C",""),
+                  heights = c(1,1,0.22,1,0.13))+
   theme( plot.margin = unit(c(0.2,0.2,0.2,0.2), "cm"))
 p_all
 
-ggsave(p_all, file = "./figures_clean/Figure4_rt_error.pdf",dpi = 300, width = 10, height = 12)
+ggsave(p_all, file = "./figures_clean/Figure4_rt_error.pdf",dpi = 300, width = 10, height = 13)
