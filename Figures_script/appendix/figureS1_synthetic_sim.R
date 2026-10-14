@@ -256,6 +256,6 @@ p_all = ggarrange(p12, as_ggplot(p_legend), nrow = 2,heights = c(0.9,0.1),
 
 p_all
 
-ggsave(p_all,file = "./figures_clean/Figure1_sim.pdf",dpi = 300,width = 13, height = 10)# 
-#ggsave(p_all,file = "./figures_png/Figure1_sim.png",dpi = 300,width = 13, height = 10)# 
+ggsave(p_all, file = "./figures_clean/Figure1_sim.png", dpi = 600,
+       width = 13, height = 10, units = "in", bg = "white")
 

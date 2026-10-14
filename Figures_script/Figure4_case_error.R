@@ -281,5 +281,6 @@ p_all = ggarrange(val.rank, metrics_value, as_ggplot(leg_all),
   theme( plot.margin = unit(c(0.2,0.2,0.2,0.2), "cm"))
 p_all
 
-ggsave(p_all, file = "./figures_clean/Figure3_case_error.pdf",dpi = 300, width = 10, height = 13)
+ggsave(p_all, file = "./figures_clean/Figure4_case_error.png", dpi = 600,
+       width = 10, height = 13, units = "in", bg = "white")
 

@@ -299,7 +299,8 @@ p_ensemble_rt = ggarrange(p1,p2,nrow = 2, labels = c("B","D"))
 p = ggarrange(p_ensemble_case,p_ensemble_rt,ncol = 2) +
   theme(   plot.margin = unit(c(0.5,0.5,0.5,0.5), "cm"))
 
-ggsave(p, file = "./figures_clean/Figure5_ensemble.pdf",dpi = 300,width = 13, height = 10)
+ggsave(p, file = "./figures_clean/Figure6_ensemble.png", dpi = 600,
+       width = 13, height = 10, units = "in", bg = "white")
 
 
 p

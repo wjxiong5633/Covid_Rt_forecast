@@ -99,4 +99,5 @@ p4
 p_all = ggarrange(p3,p4, nrow =2, ncol = 1, labels = c("A","B","C","D"))
 
 p_all
-ggsave(p_all, file = "./figures_clean/Figure2_wave5to6.pdf",dpi = 300,width = 10, height = 10)
+ggsave(p_all, file = "./figures_clean/Figure3_wave5to6.png", dpi = 600,
+       width = 10, height = 10, units = "in", bg = "white")
